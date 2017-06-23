@@ -2,10 +2,14 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: path.resolve(__dirname, 'src/main.js'),
+    entry: {
+        app: path.resolve(__dirname, 'src/main.js'),
+        login: path.resolve(__dirname, 'src/login.js'), //多入口文件
+        vendors: ['react'] //打包到通用js文件的模块列表
+    },
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'bundle.js'
+        filename: '[name].js'
     },
     module: {
         rules: [
@@ -30,6 +34,7 @@ module.exports = {
     },
     devtool: '#eval-source-map', //生成Source Maps，配置有4种，详见http://web.jobbole.com/87408/
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin({name: 'vendors', filename: 'vendors.js'}), //打包公共模块
         new webpack.HotModuleReplacementPlugin()
     ]
 }
